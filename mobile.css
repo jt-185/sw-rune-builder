@@ -1,0 +1,161 @@
+/* 手機橫向版：畫面高度只有約 370px，所以左右兩欄各自捲動，篩選收成蓋在格子上的面板 */
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;margin:0;background:#150e09;overflow:hidden}
+body{font:14px/1.45 -apple-system,"PingFang TC","Noto Sans TC",sans-serif;color:#f5ead2;
+  -webkit-text-size-adjust:100%;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none;touch-action:manipulation}
+input{-webkit-user-select:text;user-select:text}
+#app{height:100%}
+.substack{display:flex;flex-direction:column;gap:3px}
+.substack .sname{color:#e8dcc0}.substack .sval{color:#fff;font-weight:600}.substack .sgrind{color:#fb923c;font-weight:600;margin-left:3px}
+.dim{color:#b09a78}
+
+.m-welcome{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:20px;text-align:center;color:#f5ead2}
+.m-welcome h1{margin:0;font-size:22px;color:#e8c36a}
+.m-welcome p{margin:0;max-width:440px;font-size:14px}
+.m-err{color:#ff9f8f}
+.m-welcome .bld-apply{font:inherit;cursor:pointer}
+
+.swm .bld{height:100%;max-width:none;display:flex;flex-direction:column;
+  padding:max(4px,env(safe-area-inset-top)) max(6px,env(safe-area-inset-right)) max(4px,env(safe-area-inset-bottom)) max(6px,env(safe-area-inset-left))}
+.swm .bld-views{flex:none;margin-bottom:4px;gap:5px}
+.swm .bld-views button{padding:2px 12px;font-size:13px}
+.swm .bld-views span{font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.swm .m-data{flex:none}
+.swm #bld-main{flex:1;min-height:0}
+/* iOS 字體小於 16px 時點輸入框會自動放大畫面 */
+.swm .bld input[type=number],.swm .bld input:not([type]),.swm .bld select{font-size:16px!important}
+
+.swm .bld-edit{height:100%;grid-template-columns:262px minmax(0,1fr)}
+.swm .bld-left{position:static;height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:5px 6px 6px}
+.swm .bl-head{gap:6px;align-items:center}
+.swm .bl-pic{width:46px;height:46px;border-width:2px;border-radius:7px}
+.swm .bl-pic span{display:none}
+.swm .bl-name{font-size:14px}
+.swm .bl-sub{display:none}
+.swm .bl-stars{font-size:10px;line-height:1.2}
+.swm .bl-arteff{margin-top:1px;padding:0 6px;font-size:10px}
+.swm .bl-rail{flex-direction:row;padding:2px;gap:2px}
+.swm .bl-rail button{width:32px;height:32px;padding:5px}
+.swm .bl-stats{margin-top:4px}
+.swm .bs{grid-template-columns:58px 44px 54px 54px 1fr;font-size:12.5px;line-height:1.28}
+.swm .bs.gap{margin-top:3px}
+.swm .bs-g{padding-left:4px}
+.swm .bs-t{font-size:10px}
+.swm .bs-v small,.swm .bs-t small{font-size:9px}
+.swm .bl-sets{margin-top:4px;font-size:10px;gap:2px}
+.swm .bl-sets img{width:12px;height:12px}
+.swm .bl-strip{margin-top:4px;gap:2px}
+.swm .bl-strip i{width:2px}
+.swm .bl-tools{margin-top:4px}
+.swm .bl-tools button{font-size:11px;padding:2px 1px}
+.swm .bl-ba{margin-top:4px;padding:2px 4px 4px;grid-template-columns:1fr 8px 1fr;gap:2px}
+.swm .bl-ba h5{margin:0;font-size:10px}
+.swm .bl-arrow{font-size:14px}
+.swm .mt-grid{gap:2px}
+.swm .mt-n{font-size:9px}.swm .mt-lv{font-size:8px}
+.swm .mt .bt-art{font-size:9px}
+.swm .bl-warn{margin-top:4px;padding:2px 5px;font-size:10.5px}
+.swm .bl-save{position:sticky;bottom:-6px;margin:4px -6px -6px;padding:4px 6px 6px;background:#150e09;display:flex;align-items:center;gap:6px;text-align:left}
+.swm .bld-apply{width:100px;flex:none;padding:3px 0;font-size:15px!important}
+.swm .bl-state{margin:0;font-size:10px;line-height:1.2;min-width:0}
+
+.swm .bld-right{position:relative;height:100%;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+.swm .br-title{display:none}
+.swm .br-body{flex:1;min-height:0;display:flex;flex-direction:column;padding:4px 5px 0;border-radius:0 10px 0 0}
+.swm .br-bar{flex:none;margin-bottom:4px;gap:3px}
+.swm .bb-top{display:flex;flex:1;min-width:0;align-items:center;gap:3px;height:32px;padding:0 7px;background:#3a2a1a;border:1px solid #1d130a;border-radius:6px;font-size:13px;color:#fff!important}
+.swm .bb-top.on{background:#e0a62e;color:#3b2306!important}
+.swm .bb-top span{flex:1;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.swm .bb-top em{font-style:normal;font-size:10px;color:#e8c36a}
+.swm .bb-top.on em{color:#3b2306}
+.swm .bb-ic{width:32px;height:32px;font-size:16px!important}
+.swm .bb-sort{width:96px;height:32px;padding:0 2px!important}
+.swm .bb-clear{display:none}
+.swm .bf-right h4 .bf-clear{display:block;padding:1px 8px;font-size:11px;font-weight:500}
+.swm .bb-count{flex:none;padding:3px 6px;font-size:12px}
+.swm .br-grid{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;grid-template-columns:repeat(auto-fill,minmax(68px,1fr));grid-auto-rows:min-content;gap:4px;padding-bottom:6px}
+.swm .br-more{margin:0;padding:6px;font-size:12px}
+.swm .bt{border-radius:7px}
+.swm .bt-stars{font-size:9px}
+.swm .bt-stars.art{font-size:9px}
+.swm .bt-lv{font-size:11px;left:2px;bottom:0}
+.swm .bt-val{top:11px;left:1px;font-size:9px;padding:0 2px}
+.swm .bt-plan{top:11px;right:1px}
+.swm .bt-plan img{width:14px;height:14px}
+.swm .bt-plan b{font-size:8px;padding:0 1px}
+.swm .bt-lock{font-size:8px;bottom:14px;left:1px}
+.swm .bt .bt-art{font-size:13px;margin-top:6px}
+.swm .br-info{display:block;flex:none;height:38px;padding:2px 6px;overflow:hidden;background:#1a120c;font-size:11px;line-height:1.3}
+.swm .br-info div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.swm .br-info b{color:#e8c36a}.swm .br-info i{font-style:normal;font-weight:700;color:#fff}.swm .br-info u{text-decoration:none;color:#ffd98a}
+.swm .br-info em{font-style:normal;color:#ff9f8f}
+.swm .bi-hint{color:#b09a78;line-height:32px}
+#bld-toast{top:10px;bottom:auto}
+@media (max-width:720px) and (orientation:landscape){
+  .swm .br-info{height:50px;font-size:10.5px}
+  .swm .br-info div:last-child{white-space:normal}
+  .swm .bb-sort{width:84px}
+}
+
+/* 篩選面板：蓋在格子上，點旁邊收起來 */
+.swm .br-top{display:none;position:absolute;z-index:20;left:5px;right:5px;top:40px;max-height:calc(100% - 46px);overflow-y:auto;grid-template-columns:150px minmax(0,1fr);gap:8px;padding:6px 8px;border:1px solid #e8c36a;border-radius:8px;box-shadow:0 6px 18px #000a}
+.swm .br-top.open{display:grid}
+.swm .bf-set{padding:2px 6px;font-size:14px}
+.swm .bf-set img{width:22px;height:22px}
+.swm .bld-hex{width:138px;height:138px}
+.swm .bf-right h4{margin:1px 0;font-size:12.5px}
+.swm .bf-sub{grid-template-columns:minmax(0,1fr) 76px;margin-bottom:3px}
+.swm .bf-right>select,.swm .bf-sub select{padding:2px 4px!important;height:32px}
+.swm .bf-sub input{height:32px;padding:2px 5px}
+.swm .bf-cat{padding:5px 8px;margin-bottom:4px;font-size:13px}
+.swm .bf-check{font-size:12px;margin-top:4px}
+.swm .bld-setpop{position:fixed;z-index:40;left:calc(env(safe-area-inset-left) + 8px);right:calc(env(safe-area-inset-right) + 8px);top:8px;bottom:8px;width:auto;max-width:none;overflow-y:auto}
+.swm .sp-grid{grid-template-columns:repeat(6,1fr)}
+.swm .sp-grid button{padding:5px 3px;font-size:12px}
+.swm .sp-top button{padding:5px 14px}
+.swm #bld-advbox:empty{display:none}
+.swm #bld-advbox{position:absolute;z-index:20;left:5px;right:5px;top:40px;max-height:calc(100% - 46px);overflow-y:auto}
+.swm .bld-adv{margin:0;padding:6px;gap:4px 8px;font-size:12px;border:1px solid #e8c36a;box-shadow:0 6px 18px #000a}
+.swm .bld-adv input[type=number]{width:58px}
+.swm .bld-adv input:not([type]){width:96px}
+.swm .bld-adv select{height:30px}
+
+/* 魔靈選擇 */
+.swm .bm{padding:max(6px,env(safe-area-inset-top)) max(8px,env(safe-area-inset-right)) max(6px,env(safe-area-inset-bottom)) max(8px,env(safe-area-inset-left))}
+.swm .bm-panel{width:100%;height:100%;padding:6px}
+.swm .bm-top input{padding:3px 8px!important}
+.swm .bm-filters{margin:4px 0;gap:3px}
+.swm .bm-filters button{padding:3px 7px;font-size:12px}
+.swm .bm-list{flex:1;min-height:0;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));grid-auto-rows:min-content;-webkit-overflow-scrolling:touch}
+.swm .mc img{width:38px;height:38px}
+.swm .mc b{font-size:13px}.swm .mc small{font-size:10px}
+
+/* 存檔清單 */
+.swm .bld-saved{height:100%;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.swm .ps-bar{margin-bottom:5px;gap:6px;font-size:12px}
+.swm .ps-note{display:none}
+.swm .ps-bar label{flex:1}
+.swm .pc header{padding:4px 8px;gap:6px}
+.swm .pc header>img{width:36px;height:36px}
+.swm .pc-id b{font-size:14px}.swm .pc-id small{font-size:10px;margin-left:4px}
+.swm .pc-stats{grid-template-columns:repeat(8,minmax(0,1fr))}
+.swm .pc-stats span{padding:1px 4px;font-size:11px}
+.swm .pc-stats small{font-size:9px}
+.swm .pr{grid-template-columns:24px 38px minmax(96px,120px) minmax(0,1fr) 30px minmax(110px,150px);gap:6px;padding:3px 0}
+.swm .pr-subs,.swm .pr-where{grid-column:auto}
+.swm .pr .mt{width:38px}
+.swm .pr-main{font-size:12px}.swm .pr-subs{font-size:11px}.swm .pr-score{font-size:12px}
+.swm .pr-where{font-size:11px}.swm .where img{width:26px;height:26px}.swm .where small{font-size:9px}
+
+/* 轉成直向時用疊放的版面，不會壞掉 */
+@media (orientation:portrait){
+  html,body{overflow:auto}
+  .swm .bld{height:auto;min-height:100%}
+  .swm #bld-main{flex:none}
+  .swm .bld-edit{height:auto;grid-template-columns:1fr}
+  .swm .bld-left{height:auto;overflow:visible}
+  .swm .bld-right{height:75vh}
+  .swm .pr{grid-template-columns:24px 38px minmax(0,1fr) 30px}
+  .swm .pr-subs,.swm .pr-where{grid-column:3/-1}
+  .swm .pc-stats{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
