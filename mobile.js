@@ -9,14 +9,7 @@ const normCN = s => (s||'').replace(/[小]/g, '');
 let M_RUNES = {}, M_ARTS = {};
 const runeById = id => M_RUNES[id];
 const artById = id => M_ARTS[id];
-const M_SUB_NAME = {1:'HP固',2:'HP%',3:'ATK固',4:'ATK%',5:'DEF固',6:'DEF%',8:'速度',9:'爆率',10:'爆傷',11:'抵抗',12:'命中'};
-function subLineHtml(x){
-  const u = x.s===2||x.s===4||x.s===6||x.s>=9 ? '%' : '';
-  return `<span><span class="sname">${M_SUB_NAME[x.s]||'?'}</span> <span class="sval">+${x.v}${u}</span>${x.g?`<span class="sgrind">+${x.g}${u}</span>`:''}${x.gem?' ⇄':''}</span>`;
-}
-function positionTip(tip){ tip.style.display = 'none'; }         // 手機不用懸停卡，資料顯示在格子下方
-
-window.BLD_EXTRA_BTN = '<button class="m-data" data-mact="file">更新資料</button>';
+window.bldUpdateData = () => document.getElementById('m-file').click();
 
 // ---------- IndexedDB：資料檔有好幾 MB，放不進 localStorage ----------
 function mDb(){
@@ -60,6 +53,7 @@ function mApply(pack){
   DATA.runes.forEach(r => { M_RUNES[r.id] = r; });
   DATA.artifacts.forEach(a => { M_ARTS[a.id] = a; });
   renderBuilder();
+  if((pack.version||1) < 2) bldToast('資料檔是舊版，部分排序不準。請傳新的資料檔，再按左邊 ⋯ → 更新資料檔', true);
 }
 function mParse(text){
   const pack = JSON.parse(text);
@@ -86,7 +80,7 @@ function mWelcome(err){
     <h1>符文配置</h1>
     ${err ? `<p class="m-err">${bldEsc(err)}</p>` : ''}
     <p>第一次使用要載入資料檔（sw-data-….json）。檔案傳到手機後按下方按鈕選取，之後離線也能開。</p>
-    <button class="bld-apply" data-mact="file">選擇資料檔</button>
+    <button data-mact="file">選擇資料檔</button>
   </div>`;
 }
 document.addEventListener('click', e => {
